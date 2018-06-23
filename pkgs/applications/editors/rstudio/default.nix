@@ -1,42 +1,43 @@
-{ stdenv, fetchurl, fetchFromGitHub, makeDesktopItem, cmake, boost166
-, zlib, openssl, R, qtbase, qtwebkit, qtwebchannel, libuuid, hunspellDicts
-, unzip, ant, jdk, gnumake, makeWrapper, pandoc
+{ stdenv, fetchurl, fetchFromGitHub, makeDesktopItem, cmake, boost
+, zlib, openssl, R, qtbase, qtdeclarative, qtsensors, qtwebengine, qtwebchannel
+, libuuid, hunspellDicts, unzip, ant, jdk, gnumake, makeWrapper, pandoc
 }:
 
 let
   verMajor = "1";
-  verMinor = "1";
-  verPatch = "463";
+  verMinor = "2";
+  verPatch = "679";
   version = "${verMajor}.${verMinor}.${verPatch}";
-  ginVer = "1.5";
-  gwtVer = "2.7.0";
+  ginVer = "2.1.2";
+  gwtVer = "2.8.1";
 in
 stdenv.mkDerivation rec {
   name = "RStudio-${version}";
 
   nativeBuildInputs = [ cmake unzip ant jdk makeWrapper pandoc ];
 
-  buildInputs = [ boost166 zlib openssl R qtbase qtwebkit qtwebchannel libuuid ];
+  buildInputs = [ boost zlib openssl R qtbase qtdeclarative qtsensors
+                  qtwebengine qtwebchannel libuuid ];
 
   src = fetchFromGitHub {
     owner = "rstudio";
     repo = "rstudio";
     rev = "v${version}";
-    sha256 = "014g984znsczzy1fyn9y1ly3rbsngryfs674lfgciz60mqnl8im6";
+    sha256 = "156b4vgc85b5m7vfkv0k6is9ay7jxdm8zpmv8md98s47nd5ivbrg";
   };
 
   # Hack RStudio to only use the input R.
-  patches = [ ./r-location.patch ];
+  patches = [ ./r-location.patch ./fix-cmake.patch ];
   postPatch = "substituteInPlace src/cpp/core/r_util/REnvironmentPosix.cpp --replace '@R@' ${R}";
 
   ginSrc = fetchurl {
     url = "https://s3.amazonaws.com/rstudio-buildtools/gin-${ginVer}.zip";
-    sha256 = "155bjrgkf046b8ln6a55x06ryvm8agnnl7l8bkwwzqazbpmz8qgm";
+    sha256 = "16jzmljravpz6p2rxa87k5f7ir8vs7ya75lnfybfajzmci0p13mr";
   };
 
   gwtSrc = fetchurl {
     url = "https://s3.amazonaws.com/rstudio-buildtools/gwt-${gwtVer}.zip";
-    sha256 = "1cs78z9a1jg698j2n35wsy07cy4fxcia9gi00x0r0qc3fcdhcrda";
+    sha256 = "19x000m3jwnkqgi6ic81lkzyjvvxcfacw2j0vcfcaknvvagzhyhb";
   };
 
   hunspellDictionaries = with stdenv.lib; filter isDerivation (attrValues hunspellDicts);
@@ -54,6 +55,13 @@ stdenv.mkDerivation rec {
   rstudiolibclangheaders = fetchurl {
     url = https://s3.amazonaws.com/rstudio-buildtools/libclang-builtin-headers.zip;
     sha256 = "0x4ax186bm3kf098izwmsplckgx1kqzg9iiyzg95rpbqsb4593qb";
+  };
+
+  plumberSrc = fetchFromGitHub {
+    owner = "trestletech";
+    repo = "plumber";
+    rev = "v0.4.6";
+    sha256 = "02jblwyirgmwz9sdn5w45za35zby2c2l8dvxpwcqz08sv9rg90mm";
   };
 
   preConfigure =
@@ -86,6 +94,11 @@ stdenv.mkDerivation rec {
 
       mkdir -p dependencies/common/pandoc
       cp ${pandoc}/bin/pandoc dependencies/common/pandoc/
+
+      cp -r ${plumberSrc} dependencies/common/plumber
+      pushd dependencies/common
+      ${R}/bin/R CMD build --no-build-vignettes plumber
+      popd
     '';
 
   enableParallelBuilding = true;

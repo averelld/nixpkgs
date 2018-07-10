@@ -19069,6 +19069,8 @@ in
 
   pybitmessage = callPackage ../applications/networking/instant-messengers/pybitmessage { };
 
+  pyhoca-cli = callPackage ../applications/networking/remote/pyhoca-cli { };
+
   pythonmagick = callPackage ../applications/graphics/PythonMagick { };
 
   qbittorrent = libsForQt5.callPackage ../applications/networking/p2p/qbittorrent { };

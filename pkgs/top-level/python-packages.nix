@@ -4659,6 +4659,8 @@ in {
 
   wurlitzer = callPackage ../development/python-modules/wurlitzer { };
 
+  x2go = callPackage ../development/python-modules/python-x2go {};
+
   xcaplib = callPackage ../development/python-modules/xcaplib { };
 
   xlib = callPackage ../development/python-modules/xlib { };

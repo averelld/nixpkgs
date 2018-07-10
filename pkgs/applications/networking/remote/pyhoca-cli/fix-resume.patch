@@ -1,0 +1,14 @@
+diff --git i/pyhoca/cli/frontend.py w/pyhoca/cli/frontend.py
+index fb68379..c2521ec 100644
+--- i/pyhoca/cli/frontend.py
++++ w/pyhoca/cli/frontend.py
+@@ -226,8 +226,7 @@ class PyHocaCLI(x2go.X2GoClient):
+         """
+         # resume a running session
+         self.logger('resuming X2Go session: %s' % self.args.resume, loglevel=x2go.loglevel_INFO, )
+-        if available_sessions is None:
+-            available_sessions = self._X2GoClient__list_sessions(s_hash)
++        available_sessions = self._X2GoClient__list_sessions(s_hash)
+         if available_sessions and self.args.resume == 'OLDEST':
+             self._auto_resume_oldest(s_hash)
+         elif available_sessions and self.args.resume == 'NEWEST':

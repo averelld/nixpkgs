@@ -85,6 +85,7 @@ let
             --replace 'LDFLAGS :=' 'LDFLAGS := -ltls -lssl -lcrypto'
         '';
 
+        separateDebugInfo = true;
         enableParallelBuilding = true;
 
         makeFlags = [ "all" "fdb_java" ]
@@ -92,7 +93,9 @@ let
           # it gets statically linked in
           ++ lib.optional (!lib.versionAtLeast version "6.0") [ "fdb_c" ]
           # Needed environment overrides
-          ++ [ "KVRELEASE=1" ];
+          ++ [ "KVRELEASE=1"
+               "NOSTRIP=1"
+             ];
 
         # on 6.0 and later, we can specify all this information manually
         configurePhase = lib.optionalString (lib.versionAtLeast version "6.0") ''
@@ -145,16 +148,15 @@ in with builtins; {
   };
 
   foundationdb52 = makeFdb rec {
-    version = "5.2.6";
+    version = "5.2.8";
     branch  = "release-5.2";
-    rev     = "refs/tags/v5.2.6"; # seemed to be tagged incorrectly
-    sha256  = "1q3lq1hqq0f53n51gd4cw5cpayyw65dmkfplhsw1m5mghymzmskk";
+    sha256  = "1kbmmhk2m9486r4kyjlc7bb3wd50204i0p6dxcmvl6pbp1bs0wlb";
   };
 
   foundationdb60 = makeFdb rec {
-    version = "6.0.2pre2430_${substring 0 8 rev}";
+    version = "6.0.4pre2497_${substring 0 8 rev}";
     branch  = "release-6.0";
-    rev     = "7938d247a5eaf886a176575de6592b76374df58c";
-    sha256  = "0g8h2zs0f3aacs7x4hyjh0scybv33gjj6dqfb789h4n6r4gd7d9h";
+    rev     = "73d64cb244714c19bcc651122f6e7a9236aa11b5";
+    sha256  = "1jzmrf9kj0brqddlmxvzhj27r6843790jnqwkv1s3ri21fqb3hs7";
   };
 }

@@ -30,7 +30,7 @@ lib.makeScope pkgs.newScope (self: with self; {
     nautilus-sendto dconf-editor vinagre gnome-weather gnome-logs
     gnome-maps gnome-characters gnome-calendar accerciser gnome-nettool
     gnome-getting-started-docs gnome-packagekit gnome-software
-    gnome-power-manager gnome-usage
+    gnome-power-manager gnome-todo gnome-usage
   ];
 
   gamesPackages = with gnome3; [ swell-foop lightsoff iagno
@@ -45,10 +45,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     easytag meld orca rhythmbox shotwell gnome-usage
     clutter clutter-gst clutter-gtk cogl gtkvnc libdazzle;
 
-  inherit (pkgs.gnome2) ORBit2;
   libsoup = pkgs.libsoup.override { gnomeSupport = true; };
   libchamplain = pkgs.libchamplain.override { libsoup = libsoup; };
-  orbit = ORBit2;
   gnome3 = self // { recurseForDerivations = false; };
   gtk = gtk3;
   gtkmm = gtkmm3;
@@ -79,8 +77,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   evince = callPackage ./core/evince { }; # ToDo: dbus would prevent compilation, enable tests
 
   evolution-data-server = callPackage ./core/evolution-data-server { };
-
-  gconf = callPackage ./core/gconf { };
 
   geocode-glib = callPackage ./core/geocode-glib { };
 
@@ -294,6 +290,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   gnome-power-manager = callPackage ./apps/gnome-power-manager { };
 
   gnome-sound-recorder = callPackage ./apps/gnome-sound-recorder { };
+
+  gnome-todo = callPackage ./apps/gnome-todo {};
 
   gnome-weather = callPackage ./apps/gnome-weather { };
 

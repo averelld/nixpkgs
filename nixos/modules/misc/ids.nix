@@ -9,7 +9,7 @@
 # Systemd can also change ownership of service directories using the
 # RuntimeDirectory/StateDirectory options.
 
-{ config, pkgs, lib, ... }:
+{ lib, ... }:
 
 {
   options = {
@@ -323,6 +323,7 @@
       mapred = 296;
       hadoop = 297;
       hydron = 298;
+      cfssl = 299;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -606,6 +607,7 @@
       mapred = 296;
       hadoop = 297;
       hydron = 298;
+      cfssl = 299;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

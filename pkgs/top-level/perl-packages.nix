@@ -2535,6 +2535,17 @@ let
     };
   };
 
+  ConfigSimple = buildPerlPackage {
+    name = "Config-Simple-4.59";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/S/SH/SHERZODR/Config-Simple-4.59.tar.gz;
+      sha256 = "0m0hg29baarw5ds768q9r4rxb27im8kj4fazyf9gjqw4mmssjy6b";
+    };
+    meta = {
+      description = "Simple configuration file class";
+    };
+  };
+
   ConfigStd = buildPerlModule {
     name = "Config-Std-0.903";
     src = fetchurl {

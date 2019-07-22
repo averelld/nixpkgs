@@ -138,6 +138,7 @@
   ./programs/wavemon.nix
   ./programs/way-cooler.nix
   ./programs/wireshark.nix
+  ./programs/x2goserver.nix
   ./programs/xfs_quota.nix
   ./programs/xonsh.nix
   ./programs/xss-lock.nix

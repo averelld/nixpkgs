@@ -1,0 +1,4 @@
+Name: Dummy
+Description: Dummy
+Version: 1.1.0
+Libs:

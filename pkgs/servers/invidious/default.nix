@@ -27,10 +27,18 @@ crystal.buildCrystalPackage rec {
     # Needed for captcha to work.
     substituteInPlace src/invidious/users.cr \
       --replace 'Process.run(%(rsvg-convert' 'Process.run(%(${librsvg}/bin/rsvg-convert'
+
+    cp ${emptyPkgConf} libssl.pc
+    cp ${emptyPkgConf} libcrypto.pc
+    export PKG_CONFIG_PATH=$(pwd);
   '';
+
+  # We are forcing LD flags to be empty rather than fallback -lssl etc.
+  emptyPkgConf = ./dummy.pc;
 
   shardsFile = ./shards.nix;
   crystalBinaries.invidious.src = "src/invidious.cr";
+  crystalBinaries.invidious.options = [ "--debug" "--verbose" "--progress" ];
 
   buildInputs = [ libxml2 sqlite ];
 
